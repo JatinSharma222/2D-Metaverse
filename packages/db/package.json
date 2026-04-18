@@ -1,20 +1,24 @@
 {
   "name": "@repo/db",
   "version": "1.0.0",
-  "main": "index.js",
   "license": "MIT",
   "type": "module",
-  "devDependencies": {
-    "@types/node": "^25.6.0"
-  },
-  "dependencies": {
-    "@prisma/client": "^7.7.0",
-    "prisma": "7.7.0"
-  },
   "exports": {
     ".": {
       "types": "./src/index.ts",
       "default": "./src/index.ts"
     }
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "@types/pg": "^8.20.0"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.7.0",
+    "@prisma/client": "^7.7.0",
+    "@repo/typescript-config": "workspace:^",
+    "dotenv": "^17.4.2",
+    "pg": "^8.20.0",
+    "prisma": "7.7.0"
   }
 }

@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-export const adminRouter = Router();
+export const adminRouter : Router = Router();
 
 adminRouter.post("/element", (req, res) => {
     

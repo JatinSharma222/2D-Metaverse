@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-export const userRouter = Router();
+export const userRouter : Router = Router();
 
 userRouter.post("/metadata", (req, res) => {
     res.json({

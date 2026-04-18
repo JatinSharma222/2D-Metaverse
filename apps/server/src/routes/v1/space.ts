@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-export const spaceRouter = Router();
+export const spaceRouter : Router = Router();
 
 
 spaceRouter.post("/", (req, res) => {
