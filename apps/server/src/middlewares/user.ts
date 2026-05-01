@@ -1,55 +1,34 @@
-import z from 'zod';
+import jwt from "jsonwebtoken";
+import { JWT_PASSWORD } from "../config.js";
 
-export const SignupSchema = z.object({
-    username: z.string().email(),
-    password: z.string().min(8),
-    type: z.enum(["user", "admin"]),
-});
+import { NextFunction, Request, Response } from "express";
 
-export const SigninSchema = z.object({
-    username: z.string().email(),
-    password: z.string().min(8),
-});
+export const userMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const header = req.headers["authorization"];
+  const token = header?.split(" ")[1];
+  console.log(req.route.path);
+  console.log(token);
 
-export const UpdateMetadataSchema = z.object({
-    avatarId: z.string()
-});
+  if (!token) {
+    res.status(403).json({
+      message: "Unauthorized",
+    });
+    return;
+  }
 
-export const CreateSpaceSchema = z.object({
-    name: z.string(),
-    dimensions: z.string().regex(/^[0-9]{1,4}x[0-9]{1,4}$/), // e.g., "100x100" 
-    mapId: z.string(),
-});
-
-export const AddElementSchema = z.object({
-    spaceId: z.string(),
-    elementId: z.string(),
-    x: z.number(),
-    y: z.number(),
-});
-
-export const CreateElementSchema = z.object({
-    imageUrl: z.string().url(),
-    width: z.number().positive(),
-    height: z.number().positive(),
-    static: z.boolean(),
-});
-
-export const updateElementSchema = z.object({
-    imageUrl: z.string().url(),
-});
-
-export const CreateAvatarSchema = z.object({
-    name: z.string(),
-    imageUrl: z.string().url(),
-});
-
-export const CrerateMapSchema = z.object({
-    thumbnailUrl: z.string().url(),
-    dimensions: z.string().regex(/^[0-9]{1,4}x[0-9]{1,4}$/), // e.g., "100x100"
-    defaultElements: z.array(z.object({
-        elementId: z.string(),
-        x: z.number(),
-        y: z.number(),
-    })),
-});
+  try {
+    const decoded = jwt.verify(token, JWT_PASSWORD) as {
+      role: string;
+      userId: string;
+    };
+    req.userId = decoded.userId;
+    next();
+  } catch (e) {
+    res.status(401).json({ message: "Unauthorized" });
+    return;
+  }
+};

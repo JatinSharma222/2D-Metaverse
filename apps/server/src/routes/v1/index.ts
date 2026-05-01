@@ -2,11 +2,11 @@ import { Router } from "express";
 import { adminRouter } from "./admin.js";
 import { spaceRouter } from "./space.js";
 import { userRouter } from "./user.js";
-import { SignupSchema } from "../../middlewares/user.js";
+import { SignupSchema } from "../../types/index.js";
 import {client} from "@repo/db";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../../config.js";
+import { JWT_PASSWORD } from "../../config.js";
 import  {Role } from "@repo/db";
 
 export const router: Router = Router();
@@ -88,7 +88,7 @@ router.post("/signin", async (req, res) => {
         userId: user.id,
         role: user.role,
       },
-      JWT_SECRET,
+      JWT_PASSWORD,
       {
         expiresIn: "7d",
       },
